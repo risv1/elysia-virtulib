@@ -6,7 +6,12 @@
     "dev": "bun run --watch src/index.ts"
   },
   "dependencies": {
-    "elysia": "latest"
+    "@elysiajs/jwt": "^0.8.0",
+    "drizzle-kit": "^0.20.14",
+    "drizzle-orm": "^0.29.4",
+    "elysia": "latest",
+    "mysql2": "^3.9.2",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "bun-types": "latest"
