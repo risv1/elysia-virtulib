@@ -9,7 +9,7 @@ const db = drizzle(promisePool);
 
 async function main(){
     console.log("Migrating database...");
-    await migrate(db, {migrationsFolder: "drizzle"});
+    await migrate(db, { migrationsFolder: "drizzle" });
     console.log("Database migration complete!");
     process.exit(0)
 }
