@@ -1,0 +1,13 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1709315718840,
+      "tag": "0000_safe_iron_lad",
+      "breakpoints": true
+    }
+  ]
+}

@@ -3,9 +3,9 @@
   "version": "1.0.50",
   "scripts": {
     "dev": "bun run --watch src/index.ts",
-    "db:gen": "drizzle-kit generate:pg",
+    "db:gen": "drizzle-kit generate:mysql",
     "db:mg": "bun run src/utils/migrate.ts",
-    "db:push": "drizzle-kit push:pg"
+    "db:push": "drizzle-kit push:mysql"
   },
   "dependencies": {
     "@elysiajs/jwt": "^0.8.0",
