@@ -15,11 +15,10 @@ export const reservationsHandler = new Elysia({
             };
         }
 
-        const { userid, bookid } = body;
         const data = {
             id: Math.random().toString(36).substring(2, 2 + 10),
-            userid: userid,
-            bookid: bookid,
+            userid: body.userid,
+            bookid: body.bookid,
             reserved_at: new Date().toISOString(),
             due: new Date(Date.now() + 12096e5).toISOString(),
             past_due: 0 
