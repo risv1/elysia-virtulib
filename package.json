@@ -8,6 +8,8 @@
     "db:push": "drizzle-kit push:mysql"
   },
   "dependencies": {
+    "@elysiajs/cookie": "^0.8.0",
+    "@elysiajs/cors": "^0.8.0",
     "@elysiajs/jwt": "^0.8.0",
     "drizzle-kit": "^0.20.14",
     "drizzle-orm": "^0.29.4",

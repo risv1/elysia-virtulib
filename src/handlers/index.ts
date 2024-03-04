@@ -6,7 +6,6 @@ import { authController } from "./auth";
 
 export const api = new Elysia({
     name: "api",
-    prefix: "/api"
 })
     .use(authController)
     .use(booksHandler)

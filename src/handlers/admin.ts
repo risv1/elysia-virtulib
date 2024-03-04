@@ -3,9 +3,23 @@ import { BookSchema, ReservationSchema, UserSchema } from "../schema";
 import { db } from "../utils/db";
 import { eq } from "drizzle-orm";
 
+const isAdmin = new Elysia().derive(
+    async ({ set, headers }: any) => {
+        if (headers.authorization !== "admin") {
+            set.status = 403;
+            return {
+                success: false,
+                message: "Unauthorized",
+                data: null
+            }
+        }
+    }
+)
+
 export const adminController = new Elysia({
     name: "admin"
 })
+    .use(isAdmin)
     .get("/admin/users", async({set}: any) => {
         try{
             const users = await db.select().from(UserSchema);

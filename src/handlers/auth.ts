@@ -39,7 +39,7 @@ export const authController = new Elysia({
         name: body.name,
         email: body.email,
         password: await Bun.password.hash(body.password),
-        role: "user"
+        role: "user",
       };
 
       const [newUser] = await db.insert(UserSchema).values(user).execute();
@@ -58,48 +58,61 @@ export const authController = new Elysia({
       }),
     }
   )
-  .post("/login", async ({ body, set, jwt }: any) => {
-    if (!body) {
-      set.status = 401;
-      return {
-        success: false,
-        message: "Did not receive data",
-        data: null,
-      };
-    }
-    const [user] = await db
-      .select()
-      .from(UserSchema)
-      .where(eq(UserSchema.email, body.email))
-      .limit(1);
-    if (!user) {
-      set.status = 401;
-      return {
-        success: false,
-        message: "User not found",
-        data: null,
-      };
-    }
-    const passwordMatch = await Bun.password.verify(
-      body.password,
-      user.password
-    );
-    if (!passwordMatch) {
-      set.status = 401;
-      return {
-        success: false,
-        message: "Password does not match",
-        data: null,
-      };
-    }
+  .post(
+    "/login",
+    async ({ body, set, jwt }: any) => {
+      if (!body) {
+        set.status = 401;
+        return {
+          success: false,
+          message: "Did not receive data",
+          data: null,
+        };
+      }
+      const [user] = await db
+        .select()
+        .from(UserSchema)
+        .where(eq(UserSchema.email, body.email))
+        .limit(1);
+      if (!user) {
+        set.status = 401;
+        return {
+          success: false,
+          message: "User not found",
+          data: null,
+        };
+      }
+      const passwordMatch = await Bun.password.verify(
+        body.password,
+        user.password
+      );
+      if (!passwordMatch) {
+        set.status = 401;
+        return {
+          success: false,
+          message: "Password does not match",
+          data: null,
+        };
+      }
 
-    const token = await jwt.sign({
-      email: user.email,
-    });
+      const token: string = await jwt.sign({
+        email: user.email,
+        password: user.password,
+        role: user.role,
+      });
 
-    return {
-      success: true,
-      message: "User logged in",
-      data: user,
-    };
-  });
+      return {
+        success: true,
+        message: "User logged in",
+        data: user,
+        token
+      };
+    },
+    {
+      body: t.Object({
+        email: t.String(),
+        password: t.String(),
+      }),
+    }
+  )
+
