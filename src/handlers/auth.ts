@@ -2,10 +2,12 @@ import Elysia, { t } from "elysia";
 import { UserSchema } from "../schema";
 import { db } from "../utils/db";
 import { eq } from "drizzle-orm";
+import { cookie } from "@elysiajs/cookie"
 
 export const authController = new Elysia({
   name: "auth",
 })
+  .use(cookie)
   .post(
     "/register",
     async ({ body, set }: any) => {
@@ -60,7 +62,7 @@ export const authController = new Elysia({
   )
   .post(
     "/login",
-    async ({ body, set, jwt }: any) => {
+    async ({ body, set, jwt, setCookie }: any) => {
       if (!body) {
         set.status = 401;
         return {
@@ -101,11 +103,15 @@ export const authController = new Elysia({
         role: user.role,
       });
 
+      setCookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        })
+
       return {
         success: true,
         message: "User logged in",
-        data: user,
-        token
       };
     },
     {
@@ -115,4 +121,21 @@ export const authController = new Elysia({
       }),
     }
   )
+  .post("/logout", async ({ set, cookie: { token }, removeCookie }: any) => {
+
+    if(!token){
+      set.status = 401;
+      return {
+        success: false,
+        message: "User not logged in",
+        data: null,
+      };
+    }
+
+    removeCookie("token");
+    return {
+      success: true,
+      message: "User logged out",
+    };
+  })
 
